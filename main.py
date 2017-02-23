@@ -19,9 +19,11 @@ class BlogHandler(webapp2.RequestHandler):
             Get all posts by a specific user, ordered by creation date (descending).
             The user parameter will be a User object.
         """
-
+        # query = db.GqlQuery("SELECT * FROM Post WHERE author='%s' ORDER BY created DESC" % username)
+        query = Post.all().filter("author", self.user)
         # TODO - filter the query so that only posts by the given user
-        return None
+        return query.fetch(limit=limit, offset=offset)
+
 
     def get_user_by_name(self, username):
         """ Get a user object from the db, based on their username """
@@ -305,3 +307,4 @@ app = webapp2.WSGIApplication([
 auth_paths = [
     '/blog/newpost'
 ]
+# http://education.launchcode.org/web-fundamentals/assignments/blogz/

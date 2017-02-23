@@ -14,6 +14,9 @@ handlers:
 - url: .*
   script: main.app
 
+- url: /Signup
+  script: signup.html
+
 libraries:
 - name: webapp2
   version: "2.5.2"
