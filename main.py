@@ -20,7 +20,7 @@ class BlogHandler(webapp2.RequestHandler):
             The user parameter will be a User object.
         """
         # query = db.GqlQuery("SELECT * FROM Post WHERE author='%s' ORDER BY created DESC" % username)
-        query = Post.all().filter("author", self.user)
+        query = Post.all().filter("author", user)
         # TODO - filter the query so that only posts by the given user
         return query.fetch(limit=limit, offset=offset)
 
@@ -153,7 +153,7 @@ class ViewPostHandler(BlogHandler):
 
     def get(self, id, username=""):
         """ Render a page with post determined by the id (via the URL/permalink) """
-        
+
         user = self.get_user_by_name(username)
         post = Post.get_by_id(int(id))
         if post:
@@ -192,7 +192,7 @@ class SignupHandler(BlogHandler):
         if not email:
             return ""
 
-        EMAIL_RE = re.compile(r"^[\S]+@[\S]+.[\S]+$")
+        EMAIL_RE = re.compile(r"^[\S]+@[\S]+\.[\S]+$")
         if EMAIL_RE.match(email):
             return email
 
@@ -254,7 +254,7 @@ class SignupHandler(BlogHandler):
 
         if has_error:
             t = jinja_env.get_template("signup.html")
-            response = t.render(username=username, email=email, errors=errors)
+            response = t.render(username=username, email=submitted_email, errors=errors)
             self.response.out.write(response)
         else:
             self.redirect('/blog/newpost')
